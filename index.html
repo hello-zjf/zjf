@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给宇双同学的温馨祝福</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 初始弹窗样式 */
+        .initial-modal {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .gift-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .modal-message {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .confirm-btn {
+            background: linear-gradient(to right, #ff7b9c, #ffc759);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            padding: 12px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 123, 156, 0.4);
+        }
+        
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 123, 156, 0.6);
+        }
+        
+        .confirm-btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* 消息弹窗样式 */
+        .message-popup {
+            position: absolute;
+            width: 200px;
+            min-height: 60px;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 100;
+            animation: popIn 0.5s ease, float 3s ease-in-out infinite;
+            cursor: pointer;
+        }
+        
+        .popup-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        .popup-content {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .message-popup {
+                width: 160px;
+                min-height: 50px;
+                padding: 10px;
+            }
+            
+            .popup-content {
+                font-size: 14px;
+            }
+            
+            .initial-modal {
+                padding: 30px 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 初始弹窗 -->
+    <div class="initial-modal" id="initialModal">
+        <span class="gift-icon">🎁</span>
+        <h2 class="modal-title">给宇双同学的礼物</h2>
+        <p class="modal-message">您有一份温馨的祝福等待开启，确定要接收这份礼物吗？</p>
+        <button class="confirm-btn" id="confirmBtn">确定接收</button>
+    </div>
+
+    <script>
+        // 消息列表
+        const messages = [
+            "开启美好的一天吧！",
+            "天冷了，注意保暖哦",
+            "不顺心的话就找我吧",
+            "多喝水哦~",
+            "要天天开心吖~",
+            "保持好心情~",
+            "照顾好自己",
+            "你真的超棒的！",
+            "别熬夜哦~",
+            "早点休息哦~",
+            "今天过的开心嘛",
+            "你是别人的一道光~",
+            "每一天都是新的开始",
+            "今天也要加油哦！",
+            "你真的很棒！",
+            "梦想成真~",
+            "遇见你真的蛮幸运的！",
+            "保持微笑吖~",
+            "多喜乐，长安宁！",
+            "人生海海，祝你有帆有岸",
+            "你是独一无二的存在",
+            "午饭要吃热乎的哦~",
+            "今天也要做开心的小大人呀！",
+            "累了就歇一歇",
+            "祝你好梦~",
+            "今天忙不忙呀",
+            "吹吹晚风，放空自己！",
+            "没什么是一杯奶茶解决不了的",
+            "一起去吃火锅呀",
+            "吃点好吃的心情也会变好呢",
+            "一起去淌水不",
+            "今天的云也好好看呀",
+            "最近有啥开心的事呢",
+            "有没有想去玩的地方呢",
+            "愿你所有烦恼都消失",
+            "一起去逛公园不",
+            "多吃水果哦~",
+            "吃点好吃的奖励自己吧！",
+            "希望你工作顺顺利利的~",
+            "遇见你很幸运",
+            "所有的美好都在路上呢",
+            "做自己喜欢的样子~",
+            "愿你永远鲜活明媚",
+            "愿你被温柔以待",
+            "这段时间累不累呀",
+            "没有什么是火锅解决不了的",
+            "最近伙食怎么样呢",
+            "要按时吃饭哦",
+            "偶尔也允许自己偷偷懒吧",
+            "你值得被世界温柔以待",
+            "期待下一次见面",
+            "下次带你吃好吃的",
+            "小小的进步也是成长呀",
+            "我一直都在呢",
+            "今天有没有吃到好吃的菜呢",
+            "一切都在变好呢",
+            "好好爱自己~",
+            "顺顺利利~",
+            "愿你笑容常在~"
+        ];
+        
+        // 颜色列表
+        const warmColors = [
+            {r: 255, g: 239, b: 213},  // 浅橙
+            {r: 255, g: 228, b: 196},  // 浅米
+            {r: 255, g: 222, b: 173},  // 浅黄
+            {r: 255, g: 182, b: 193},  // 浅粉
+            {r: 255, g: 204, b: 153},  // 浅橙黄
+            {r: 255, g: 250, b: 205},  // 柠檬黄
+            {r: 255, g: 245, b: 238},  // 雪白暖色
+            {r: 255, g: 228, b: 225},  // 薄雾玫瑰
+            {r: 255, g: 218, b: 185},  // 桃色
+            {r: 255, g: 160, b: 122},  // 浅珊瑚
+            {r: 255, g: 236, b: 139},  // 浅金黄
+            {r: 255, g: 215, b: 180},  // 浅杏色
+            {r: 255, g: 223, b: 211},  // 浅橙粉
+            {r: 255, g: 240, b: 245},  // 浅紫粉
+            {r: 255, g: 250, b: 240},  // 浅米白
+            {r: 255, g: 239, b: 213},  // 浅橙
+            {r: 255, g: 228, b: 181},  // 浅黄棕
+            {r: 255, g: 192, b: 203},  // 粉色
+            {r: 255, g: 228, b: 225}   // 薄雾玫瑰
+        ];
+        
+        // 获取DOM元素
+        const initialModal = document.getElementById('initialModal');
+        const confirmBtn = document.getElementById('confirmBtn');
+        
+        // 弹窗定时器
+        let timer = null;
+        
+        // 确认按钮点击事件
+        confirmBtn.addEventListener('click', function() {
+            // 隐藏初始弹窗
+            initialModal.style.display = 'none';
+            
+            // 开始显示消息弹窗
+            startShowingPopups();
+        });
+        
+        // 开始显示弹窗
+        function startShowingPopups() {
+            // 设置弹窗速度（毫秒）- 可以修改这个值来控制弹窗出现的速度
+            const speed = 100; // 每300毫秒创建一个新弹窗
+            
+            // 如果已经在创建弹窗，先清除之前的定时器
+            if (timer) {
+                clearInterval(timer);
+            }
+            
+            // 持续创建弹窗
+            timer = setInterval(function() {
+                createPopup();
+            }, speed);
+        }
+        
+        // 创建单个弹窗
+        function createPopup() {
+            // 随机选择消息和颜色
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            const randomColor = warmColors[Math.floor(Math.random() * warmColors.length)];
+            
+            // 创建弹窗元素
+            const popup = document.createElement('div');
+            popup.className = 'message-popup';
+            popup.style.backgroundColor = `rgb(${randomColor.r}, ${randomColor.g}, ${randomColor.b})`;
+            
+            // 随机位置（确保在可视区域内）
+            const maxX = window.innerWidth - 220;
+            const maxY = window.innerHeight - 100;
+            const randomX = Math.max(20, Math.min(maxX, Math.floor(Math.random() * maxX)));
+            const randomY = Math.max(20, Math.min(maxY, Math.floor(Math.random() * maxY)));
+            
+            popup.style.left = `${randomX}px`;
+            popup.style.top = `${randomY}px`;
+            
+            // 添加弹窗内容
+            popup.innerHTML = `
+                <div class="popup-title">to宇双同学</div>
+                <div class="popup-content">${randomMessage}</div>
+            `;
+            
+            // 点击弹窗可关闭
+            popup.addEventListener('click', function() {
+                this.remove();
+            });
+            
+            // 添加到页面
+            document.body.appendChild(popup);
+            
+            // 10秒后自动移除弹窗
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.remove();
+                }
+            }, 20000);
+        }
+    </script>
+</body>
+</html>
