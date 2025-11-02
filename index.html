@@ -274,7 +274,7 @@
         // 开始显示弹窗
         function startShowingPopups() {
             // 设置弹窗速度（毫秒）- 加快弹窗出现速度
-            const speed = 80; // 从100毫秒减少到80毫秒，加快出现速度
+            const speed = 100;
             
             // 如果已经在创建弹窗，先清除之前的定时器
             if (timer) {
@@ -298,19 +298,23 @@
             popup.className = 'message-popup';
             popup.style.backgroundColor = `rgb(${randomColor.r}, ${randomColor.g}, ${randomColor.b})`;
             
-            // 优化位置计算，让弹窗更密集
-            const popupWidth = 150; // 与CSS中保持一致
-            const popupHeight = 60; // 与CSS中保持一致
+            // 弹窗尺寸
+            const popupWidth = 150;
+            const popupHeight = 60;
             
-            // 计算可用空间，考虑更小的边距
-            const horizontalMargin = 5; // 减少水平边距
-            const verticalMargin = 5;   // 减少垂直边距
+            // 允许弹窗部分超出屏幕边缘
+            const edgeOffset = popupWidth * 0.6; // 允许弹窗超出屏幕边缘60%的宽度
             
-            const maxX = window.innerWidth - popupWidth - horizontalMargin;
+            // 计算弹窗位置范围
+            const minX = -edgeOffset; // 左侧可以超出屏幕
+            const maxX = window.innerWidth - popupWidth + edgeOffset; // 右侧可以超出屏幕
+            
+            // 垂直方向保持正常范围
+            const verticalMargin = 5;
             const maxY = window.innerHeight - popupHeight - verticalMargin;
             
-            // 确保位置在屏幕内
-            const randomX = Math.max(horizontalMargin, Math.min(maxX, Math.floor(Math.random() * maxX)));
+            // 随机位置
+            const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
             const randomY = Math.max(verticalMargin, Math.min(maxY, Math.floor(Math.random() * maxY)));
             
             popup.style.left = `${randomX}px`;
@@ -330,7 +334,7 @@
             // 添加到页面
             document.body.appendChild(popup);
             
-            // 15秒后自动移除弹窗（稍微延长一点）
+            // 15秒后自动移除弹窗
             setTimeout(() => {
                 if (popup.parentNode) {
                     popup.remove();
